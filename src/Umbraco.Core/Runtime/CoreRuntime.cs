@@ -314,10 +314,8 @@ namespace Umbraco.Core.Runtime
             else if (localVersion > codeVersion)
             {
                 logger.Warn<CoreRuntime>("Local version '{LocalVersion}' > code version '{CodeVersion}', downgrading is not supported.", localVersion, codeVersion);
-                _state.Level = RuntimeLevel.BootFailed;
-
-                // in fact, this is bad enough that we want to throw
-                throw new BootFailedException($"Local version \"{localVersion}\" > code version \"{codeVersion}\", downgrading is not supported.");
+                _state.Level = RuntimeLevel.BootFailed | RuntimeLevel.DowngradeUnsupported;
+                return;
             }
             else if (databaseFactory.Configured == false)
             {
@@ -346,10 +344,8 @@ namespace Umbraco.Core.Runtime
             {
                 // cannot connect to configured database, this is bad, fail
                 logger.Debug<CoreRuntime>("Could not connect to database.");
-                _state.Level = RuntimeLevel.BootFailed;
-
-                // in fact, this is bad enough that we want to throw
-                throw new BootFailedException("A connection string is configured but Umbraco could not connect to the database.");
+                _state.Level = RuntimeLevel.BootFailed | RuntimeLevel.CannotConnectDb;
+                return;
             }
 
             // if we already know we want to upgrade,

@@ -32,6 +32,16 @@
         /// <summary>
         /// The runtime has detected an up-to-date Umbraco install and is running.
         /// </summary>
-        Run = 4
+        Run = 4,
+
+        /// <summary>
+        /// Local version is greater than the Umbraco version, requiring a downgrade, which isn't supported
+        /// </summary>
+        DowngradeUnsupported = 10,
+
+        /// <summary>
+        /// Connection string set but DB couldn't be connected to
+        /// </summary>
+        CannotConnectDb = 20
     }
 }
